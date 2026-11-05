@@ -143,7 +143,6 @@ body { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 .bottom .wrap { padding-block: 8px 10px; }
 .bottom-bar { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; }
 .bottom-bar h2 { margin: 0; font-size: .95rem; }
-.bottom-bar .spacer { flex: 1; }
 .bottom-bar .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
 .bottom-bar .seg button { all: unset; cursor: pointer; padding: 5px 10px; font-size: .74rem; color: var(--muted); background: var(--input); }
 .bottom-bar .seg button + button { border-left: 1px solid var(--border); }
@@ -264,7 +263,7 @@ body { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
   <p class="foot">Data compiled from public filings and press releases. $/GPU-hr (Adj) normalizes rack-scale (GB/VR) pricing per GPU. Customer type is inferred from the deal name; "Undisclosed" where the counterparty is not named. Deals without a date on the selected axis are omitted from the time-series charts. XIRR values above 300% or effectively 0% (solver artifacts) are left off the XIRR chart but kept in the table. © @HLJ Capital Advisors LLC</p>
 </div></div>
 <div class="bottom" id="bottom" data-state="partial"><div class="wrap">
-  <div class="bottom-bar"><h2>Deals <span id="tableCount" style="color:var(--muted);font-weight:500"></span></h2><span class="spacer"></span><span class="seg" role="group" aria-label="Deals table size"><button type="button" data-state="collapsed">Hide</button><button type="button" data-state="partial">3 rows</button><button type="button" data-state="expanded">Expand</button></span></div>
+  <div class="bottom-bar"><h2>Deals <span id="tableCount" style="color:var(--muted);font-weight:500"></span></h2><span class="seg" role="group" aria-label="Deals table size"><button type="button" data-state="collapsed">Hide</button><button type="button" data-state="partial">3 rows</button><button type="button" data-state="expanded">Expand</button></span></div>
   <div class="table-wrap">
     <table id="dealTable"><thead></thead><tbody></tbody></table>
   </div>
