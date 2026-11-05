@@ -117,8 +117,6 @@ body { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 .top .filters { margin: 10px 0 12px; }
 .top .kpis { margin-bottom: 0; }
 .scroll .wrap { padding-block: 14px 40px; }
-.table-wrap { overflow: visible; max-height: none; }
-th { top: 0; }
 /* Title nav */
 .nav { position: relative; }
 .nav > button {
@@ -139,6 +137,23 @@ th { top: 0; }
 .nav-menu a:hover, .nav-menu a:focus-visible { background: rgba(91,140,255,.12); outline: none; }
 .nav-menu a.current { color: var(--accent2); }
 .nav-menu .lbl { font-size: .66rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; padding: 4px 10px 2px; }
+
+/* Bottom pane: fixed deals table, collapsible */
+.bottom { flex: 0 0 auto; border-top: 1px solid var(--border); background: var(--bg); box-shadow: 0 -6px 18px rgba(0,0,0,.35); z-index: 15; }
+.bottom .wrap { padding-block: 8px 10px; }
+.bottom-bar { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; }
+.bottom-bar h2 { margin: 0; font-size: .95rem; }
+.bottom-bar .spacer { flex: 1; }
+.bottom-bar .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.bottom-bar .seg button { all: unset; cursor: pointer; padding: 5px 10px; font-size: .74rem; color: var(--muted); background: var(--input); }
+.bottom-bar .seg button + button { border-left: 1px solid var(--border); }
+.bottom-bar .seg button:hover, .bottom-bar .seg button:focus-visible { color: var(--text); }
+.bottom-bar .seg button.on { color: var(--text); background: rgba(91,140,255,.18); }
+.bottom .table-wrap { overflow: auto; max-height: none; height: var(--table-h, 154px); transition: height .18s; }
+.bottom[data-state="collapsed"] .table-wrap { display: none; }
+.bottom[data-state="partial"] { --table-h: 154px; }
+.bottom[data-state="expanded"] { --table-h: 55vh; }
+@media (max-width: 640px) { .bottom[data-state="expanded"] { --table-h: 45vh; } }
 </style>
 </head>
 <body>
@@ -246,15 +261,33 @@ th { top: 0; }
       <div class="chart-box tall" id="barBox"><canvas id="barChart"></canvas></div>
     </div>
   </div>
-  <h2 style="font-size:.95rem;margin:8px 0;">Deals <span id="tableCount" style="color:var(--muted);font-weight:500"></span></h2>
+  <p class="foot">Data compiled from public filings and press releases. $/GPU-hr (Adj) normalizes rack-scale (GB/VR) pricing per GPU. Customer type is inferred from the deal name; "Undisclosed" where the counterparty is not named. Deals without a date on the selected axis are omitted from the time-series charts. XIRR values above 300% or effectively 0% (solver artifacts) are left off the XIRR chart but kept in the table. © @HLJ Capital Advisors LLC</p>
+</div></div>
+<div class="bottom" id="bottom" data-state="partial"><div class="wrap">
+  <div class="bottom-bar"><h2>Deals <span id="tableCount" style="color:var(--muted);font-weight:500"></span></h2><span class="spacer"></span><span class="seg" role="group" aria-label="Deals table size"><button type="button" data-state="collapsed">Hide</button><button type="button" data-state="partial">3 rows</button><button type="button" data-state="expanded">Expand</button></span></div>
   <div class="table-wrap">
     <table id="dealTable"><thead></thead><tbody></tbody></table>
   </div>
-  <p class="foot">Data compiled from public filings and press releases. $/GPU-hr (Adj) normalizes rack-scale (GB/VR) pricing per GPU. Customer type is inferred from the deal name; "Undisclosed" where the counterparty is not named. Deals without a date on the selected axis are omitted from the time-series charts. XIRR values above 300% or effectively 0% (solver artifacts) are left off the XIRR chart but kept in the table. © @HLJ Capital Advisors LLC</p>
 </div></div>
 
 <script>
 const PAGE_ID = "neocloud";
+
+// ---------- Bottom pane state (hidden / 3 rows / expanded) ----------
+(function () {
+  const pane = document.getElementById("bottom"); if (!pane) return;
+  const KEY = PAGE_ID + ":tableState";
+  let state = "partial";
+  try { const v = localStorage.getItem(KEY); if (v === "collapsed" || v === "partial" || v === "expanded") state = v; } catch (e) {}
+  function apply(s) {
+    state = s; pane.setAttribute("data-state", s);
+    pane.querySelectorAll(".seg button").forEach(b => b.classList.toggle("on", b.getAttribute("data-state") === s));
+    try { localStorage.setItem(KEY, s); } catch (e) {}
+    window.dispatchEvent(new Event("resize")); // let Chart.js / map reflow
+  }
+  pane.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => apply(b.getAttribute("data-state"))));
+  apply(state);
+})();
 
 // ---------- Page navigation (hover/click dropdown on the title) ----------
 (function () {
