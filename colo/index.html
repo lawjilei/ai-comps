@@ -181,6 +181,10 @@ body { background: var(--canvas); }
 .top header { background: transparent; border-bottom-color: var(--divider); }
 .bottom { background: linear-gradient(0deg, var(--chrome), var(--chrome2)); border-top-color: var(--divider); }
 .scroll { background: var(--canvas); }
+
+/* Accent hairlines on the chrome edges */
+.top { box-shadow: 0 1px 0 rgba(91,140,255,.35), 0 6px 18px rgba(0,0,0,.35); border-bottom-color: rgba(91,140,255,.22); }
+.bottom { box-shadow: 0 -1px 0 rgba(91,140,255,.35), 0 -6px 18px rgba(0,0,0,.35); border-top-color: rgba(91,140,255,.22); }
 </style>
 </head>
 <body>
