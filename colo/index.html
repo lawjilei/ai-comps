@@ -173,6 +173,14 @@ body { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 .bottom[data-state="partial"] { --table-h: 154px; }
 .bottom[data-state="expanded"] { --table-h: 55vh; }
 @media (max-width: 640px) { .bottom[data-state="expanded"] { --table-h: 45vh; } }
+
+/* Chrome vs canvas: lifted fixed panes, recessed scroll well */
+:root { --chrome: #10172a; --chrome2: #0f1524; --canvas: #080b12; --divider: #2f3b55; }
+body { background: var(--canvas); }
+.top { background: linear-gradient(180deg, var(--chrome), var(--chrome2)); border-bottom-color: var(--divider); }
+.top header { background: transparent; border-bottom-color: var(--divider); }
+.bottom { background: linear-gradient(0deg, var(--chrome), var(--chrome2)); border-top-color: var(--divider); }
+.scroll { background: var(--canvas); }
 </style>
 </head>
 <body>
