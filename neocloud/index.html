@@ -171,6 +171,20 @@ body { background: var(--canvas); }
 .chip.low { color: #c9b26b; background: rgba(242,193,78,.10); border-color: rgba(242,193,78,.3); }
 .chip.bad { color: #ff8a8a; background: rgba(220,80,80,.14); border-color: rgba(220,80,80,.4); }
 .chip.na { color: var(--muted); background: rgba(154,168,191,.08); border-color: rgba(154,168,191,.25); }
+
+/* Mobile / touch: no frames — one normal scrolling page */
+@media (max-width: 980px), (hover: none) and (pointer: coarse) {
+  html, body { height: auto; }
+  body { display: block; overflow: auto; }
+  .top, .scroll, .bottom { flex: none; overflow: visible; min-height: 0; }
+  .top { position: static; }
+  .top .kpis { margin-bottom: 4px; }
+  .scroll .wrap { padding-block: 12px 12px; }
+  .bottom .table-wrap { height: auto !important; max-height: none; overflow-x: auto; overflow-y: visible; }
+  .bottom[data-state="collapsed"] .table-wrap { display: none; }
+  .bottom .seg button[data-state="partial"], .bottom .seg button[data-state="expanded"] { display: none; }
+  .map-box { max-height: 60vh; }
+}
 </style>
 </head>
 <body>
