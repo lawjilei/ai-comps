@@ -208,6 +208,7 @@ body { background: var(--canvas); }
   .bottom[data-state="partial"] .seg button[data-state="expanded"] { color: var(--text); background: rgba(91,140,255,.18); }
   .map-box { max-height: 60vh; }
 }
+a.deal-link.approx { color: var(--muted); border-bottom-style: dashed; }
 </style>
 </head>
 <body>
@@ -803,64 +804,64 @@ const SITE_META = {
 /*__SITE_GEO_START__*/
 // [lat, lon, place]; multi:true = program spans several sites, plotted at the lead site.
 const SITE_GEO = {
-  "CORZ 200": { ll: [33.215, -97.133], place: "Denton TX (lead site; multi-site program)", multi: true },
-  "CORZ 70": { ll: [35.748, -95.368], place: "Muskogee OK (likely; multi-site program)", multi: true },
-  "CORZ 112": { ll: [34.770, -84.970], place: "Dalton GA (lead site; multi-site program)", multi: true },
-  "CORZ 120": { ll: [34.770, -84.970], place: "Dalton GA (likely; single site, unnamed)", multi: true },
-  "CORZ Denton": { ll: [33.215, -97.133], place: "Denton TX" },
-  "CORZ AMD": { ll: [31.423, -103.493], place: "Pecos TX (lead; also Dalton GA, Hunt Co. TX, Muskogee OK, Auburn AL)", multi: true },
-  "WULF CB1&2": { ll: [43.330, -78.550], place: "Lake Mariner, Somerset NY" },
-  "WULF CB-3&4": { ll: [43.330, -78.550], place: "Lake Mariner, Somerset NY" },
-  "WULF CB-5": { ll: [43.330, -78.550], place: "Lake Mariner, Somerset NY" },
-  "WULF Hawesville": { ll: [37.900, -86.755], place: "Hawesville KY" },
-  "WYFI NC-1": { ll: [36.385, -79.960], place: "Madison NC" },
-  "IOND Cedarvale": { ll: [31.460, -103.400], place: "Barstow TX" },
-  "CIFR Barber Lake Phase 1": { ll: [32.388, -100.863], place: "Colorado City TX" },
-  "CIFR Barber Lake Phase 2": { ll: [32.388, -100.863], place: "Colorado City TX" },
-  "CIFR Barber Lake 2037": { ll: [32.388, -100.863], place: "Colorado City TX" },
-  "CIFR Black Pearl": { ll: [31.751, -103.160], place: "Wink TX" },
-  "CIFR Stingray": { ll: [32.319, -102.546], place: "Andrews TX" },
-  "APLD PF1": { ll: [46.003, -98.527], place: "Ellendale ND" },
-  "APLD PF2": { ll: [46.977, -96.883], place: "Harwood ND" },
-  "APLD DF1": { ll: [31.393, -92.673], place: "Boyce LA" },
-  "APLD PF3": { ll: [47.117, -101.300], place: "Oliver County ND" },
-  "APLD DF2": { ll: [33.258, -87.317], place: "Brookwood AL" },
-  "DGXX Columbiana": { ll: [33.178, -86.607], place: "Columbiana AL" },
-  "BTDR Tydal": { ll: [63.05, 11.65], place: "Tydal, Norway" },
-  "HUT River Bend": { ll: [30.780, -91.380], place: "West Feliciana Parish LA" },
-  "HUT Beacon Point 1": { ll: [27.800, -97.600], place: "Nueces County TX" },
-  "HUT Beacon Point 2": { ll: [27.800, -97.600], place: "Nueces County TX" },
-  "CLSK Sandersville": { ll: [32.982, -82.810], place: "Sandersville GA" },
-  "RIOT Rockdale 1": { ll: [30.655, -97.001], place: "Rockdale TX" },
-  "RIOT Rockdale 2": { ll: [30.655, -97.001], place: "Rockdale TX" },
-  "RIOT Rockdale 3": { ll: [30.655, -97.001], place: "Rockdale TX" },
-  "RIOT Corsicana": { ll: [32.095, -96.469], place: "Corsicana TX" },
-  "FRMI Matador 1": { ll: [35.400, -101.370], place: "Carson County TX" },
-  "GLXY Helios 1": { ll: [33.620, -100.840], place: "Dickens County TX" },
-  "GLXY Helios 2": { ll: [33.620, -100.840], place: "Dickens County TX" },
-  "GLXY Helios 3": { ll: [33.620, -100.840], place: "Dickens County TX" },
-  "Stargate Abilene": { ll: [32.449, -99.733], place: "Abilene TX" },
-  "Stargate Shackelford (Vantage Frontier)": { ll: [32.740, -99.350], place: "Shackelford County TX" },
-  "Stargate Milam County": { ll: [31.070, -96.980], place: "Milam County TX" },
-  "Stargate Lordstown": { ll: [41.160, -80.860], place: "Lordstown OH" },
-  "Stargate New Mexico (Project Jupiter)": { ll: [31.860, -106.640], place: "Doña Ana County NM" },
-  "Stargate Michigan (Saline Twp)": { ll: [42.170, -83.780], place: "Saline Township MI" },
-  "Stargate Wisconsin (Vantage Lighthouse)": { ll: [43.387, -87.876], place: "Port Washington WI" },
-  "xAI Colossus 1": { ll: [35.050, -90.080], place: "South Memphis TN" },
-  "xAI Colossus 2": { ll: [35.000, -90.030], place: "Whitehaven, Memphis TN / Southaven MS" },
-  "xAI Macrohardrr (Colossus 3)": { ll: [34.950, -90.000], place: "Southaven MS" },
-  "Fluidstack Abernathy": { ll: [33.832, -101.843], place: "Abernathy TX" },
-  "Meridian Arc (Sullivan County)": { ll: [39.050, -87.350], place: "New Lebanon IN" },
-  "Zenith Arc (Okmulgee County)": { ll: [35.620, -95.960], place: "Okmulgee County OK" },
-  "Fluidstack Cameron County": { ll: [26.240, -97.580], place: "Rio Hondo TX" },
-  "Nexus Hubbard": { ll: [31.850, -96.800], place: "Hubbard TX" },
-  "Meta Hyperion (Blue Owl JV)": { ll: [32.480, -91.760], place: "Richland Parish LA" },
-  "Meta El Paso (BlackRock JV)": { ll: [31.900, -106.420], place: "El Paso TX" },
-  "Meta Prometheus": { ll: [40.080, -82.800], place: "New Albany OH" },
-  "Meta Lebanon IN": { ll: [40.050, -86.470], place: "Lebanon IN" },
-  "Microsoft Fairwater WI": { ll: [42.720, -87.880], place: "Mount Pleasant WI" },
-  "Microsoft Fairwater Atlanta": { ll: [33.450, -84.460], place: "Fayetteville GA" },
-  "Amazon Project Rainier": { ll: [41.700, -86.440], place: "New Carlisle IN" }
+  "CORZ 200": { ll: [33.2166, -97.2126], place: "Denton TX (lead site; multi-site program)", multi: true, conf: "high", addr: "8171 Jim Christal Rd, Denton TX (Epoch AI)" },
+  "CORZ 70": { ll: [35.6900, -95.3850], place: "Muskogee OK (likely; multi-site program)", multi: true, conf: "medium", addr: "1525 W 43rd St S, Muskogee OK (Griffin Industrial Park)" },
+  "CORZ 112": { ll: [34.7133, -84.9513], place: "Dalton GA (lead site; multi-site program)", multi: true, conf: "high", addr: "2205 Industrial South Rd, Dalton GA (Epoch AI)" },
+  "CORZ 120": { ll: [34.7133, -84.9513], place: "Dalton GA (likely; single site, unnamed)", multi: true, conf: "high", addr: "2205 Industrial South Rd, Dalton GA (Epoch AI)" },
+  "CORZ Denton": { ll: [33.2166, -97.2126], place: "Denton TX", conf: "high", addr: "8171 Jim Christal Rd, Denton TX (Epoch AI)" },
+  "CORZ AMD": { ll: [31.5335, -103.8008], place: "Pecos TX (lead; also Dalton GA, Hunt Co. TX, Muskogee OK, Auburn AL)", multi: true, conf: "medium", addr: "1851 FM 2119, Pecos TX (TCEQ stormwater record)" },
+  "WULF CB1&2": { ll: [43.3582, -78.6008], place: "Lake Mariner, Somerset NY", conf: "high", addr: "7725 Lake Rd, Barker NY (Epoch AI)" },
+  "WULF CB-3&4": { ll: [43.3582, -78.6008], place: "Lake Mariner, Somerset NY", conf: "high", addr: "7725 Lake Rd, Barker NY (Epoch AI)" },
+  "WULF CB-5": { ll: [43.3582, -78.6008], place: "Lake Mariner, Somerset NY", conf: "high", addr: "7725 Lake Rd, Barker NY (Epoch AI)" },
+  "WULF Hawesville": { ll: [37.9370, -86.7870], place: "Hawesville KY", conf: "medium", addr: "Former Century Aluminum smelter, KY-271 N, Hawesville KY" },
+  "WYFI NC-1": { ll: [36.3970, -79.9780], place: "Madison NC", conf: "low", addr: "805 Island Dr, Madison NC (former Unifi plant); not satellite-verified" },
+  "IOND Cedarvale": { ll: [31.4600, -103.4000], place: "Barstow TX", conf: "low", addr: "3013 FM 516, Barstow TX; coordinates approximate" },
+  "CIFR Barber Lake Phase 1": { ll: [32.4000, -100.9200], place: "Colorado City TX", conf: "low", addr: "951 County Road 204, Colorado City TX (TDLR); ~5 km W of town" },
+  "CIFR Barber Lake Phase 2": { ll: [32.4000, -100.9200], place: "Colorado City TX", conf: "low", addr: "951 County Road 204, Colorado City TX (TDLR); ~5 km W of town" },
+  "CIFR Barber Lake 2037": { ll: [32.4000, -100.9200], place: "Colorado City TX", conf: "low", addr: "951 County Road 204, Colorado City TX (TDLR); ~5 km W of town" },
+  "CIFR Black Pearl": { ll: [31.6850, -103.0630], place: "Wink TX", conf: "medium", addr: "11786 County Road 209, Wink TX" },
+  "CIFR Stingray": { ll: [32.3700, -102.9800], place: "Andrews TX", conf: "low", addr: "250-ac site W of Andrews TX; Baxtel marker" },
+  "APLD PF1": { ll: [46.0128, -98.5724], place: "Ellendale ND", conf: "high", addr: "9685 87th Ave SE, Ellendale ND (Epoch AI)" },
+  "APLD PF2": { ll: [46.9630, -96.8450], place: "Harwood ND", conf: "medium", addr: "Cass County Hwy 81 N of 64th Ave N, Harwood ND" },
+  "APLD DF1": { ll: [31.3846, -92.6946], place: "Boyce LA", conf: "medium", addr: "James Rd & LA-121, Boyce LA (near Cleco Brame)" },
+  "APLD PF3": { ll: [47.1050, -101.4250], place: "Oliver County ND", conf: "low", addr: "21st St SW, Center ND (S of Hanover, ND-25/ND-31)" },
+  "APLD DF2": { ll: [33.2100, -87.2600], place: "Brookwood AL", conf: "low", addr: "Brookwood Pkwy & George Newell Rd, Brookwood AL" },
+  "DGXX Columbiana": { ll: [33.1810, -86.6230], place: "Columbiana AL", conf: "medium", addr: "130 Industrial Pkwy, Columbiana AL (former Grede foundry)" },
+  "BTDR Tydal": { ll: [63.0314, 11.6842], place: "Tydal, Norway", conf: "medium", addr: "Stugudalsvegen 190, Tydal, Norway (adjacent Nea hydro)" },
+  "HUT River Bend": { ll: [30.7300, -91.3100], place: "West Feliciana Parish LA", conf: "low", addr: "611-ac tract off LA-964 at US-61, West Feliciana Parish LA" },
+  "HUT Beacon Point 1": { ll: [27.8230, -97.6400], place: "Nueces County TX", conf: "low", addr: "4650 FM 1694, Robstown TX (W of Calallen); not satellite-verified" },
+  "HUT Beacon Point 2": { ll: [27.8230, -97.6400], place: "Nueces County TX", conf: "low", addr: "4650 FM 1694, Robstown TX (W of Calallen); not satellite-verified" },
+  "CLSK Sandersville": { ll: [33.0033, -82.8374], place: "Sandersville GA", conf: "medium", addr: "2015 George J. Lyons Pkwy, Sandersville GA" },
+  "RIOT Rockdale 1": { ll: [30.5720, -97.0700], place: "Rockdale TX", conf: "medium", addr: "2721 Charles Martin Hall Rd, Rockdale TX (ex-Alcoa)" },
+  "RIOT Rockdale 2": { ll: [30.5720, -97.0700], place: "Rockdale TX", conf: "medium", addr: "2721 Charles Martin Hall Rd, Rockdale TX (ex-Alcoa)" },
+  "RIOT Rockdale 3": { ll: [30.5720, -97.0700], place: "Rockdale TX", conf: "medium", addr: "2721 Charles Martin Hall Rd, Rockdale TX (ex-Alcoa)" },
+  "RIOT Corsicana": { ll: [31.9636, -96.5210], place: "Corsicana TX", conf: "medium", addr: "6980 FM 709 S, Corsicana TX (~7 mi S of town)" },
+  "FRMI Matador 1": { ll: [35.2838, -101.5690], place: "Carson County TX", conf: "medium", addr: "US-60 & FM 2373, Carson County TX (TTU land, Pantex adjacent)" },
+  "GLXY Helios 1": { ll: [33.7742, -100.8689], place: "Dickens County TX", conf: "high", addr: "984 County Road 112, Afton TX (Epoch AI)" },
+  "GLXY Helios 2": { ll: [33.7742, -100.8689], place: "Dickens County TX", conf: "high", addr: "984 County Road 112, Afton TX (Epoch AI)" },
+  "GLXY Helios 3": { ll: [33.7742, -100.8689], place: "Dickens County TX", conf: "high", addr: "984 County Road 112, Afton TX (Epoch AI)" },
+  "Stargate Abilene": { ll: [32.5013, -99.7856], place: "Abilene TX", conf: "high", addr: "5502 Spinks Rd, Abilene TX (Lancium Clean Campus)" },
+  "Stargate Shackelford (Vantage Frontier)": { ll: [32.5486, -99.5564], place: "Shackelford County TX", conf: "high", addr: "299 FM 604 / TX-351 & FM 604, Shackelford County TX (TCEQ permit coords)" },
+  "Stargate Milam County": { ll: [31.0200, -96.9750], place: "Milam County TX", conf: "medium", addr: "2895 County Road 134, Burlington TX (US-77 & CR 134; TCEQ stormwater)" },
+  "Stargate Lordstown": { ll: [41.1515, -80.8700], place: "Lordstown OH", conf: "medium", addr: "2300 Hallock Young Rd, Lordstown OH (ex-GM/Foxconn)" },
+  "Stargate New Mexico (Project Jupiter)": { ll: [31.8640, -106.6890], place: "Doña Ana County NM", conf: "medium", addr: "NM-136 (Pete V. Domenici Hwy), Santa Teresa NM" },
+  "Stargate Michigan (Saline Twp)": { ll: [42.1480, -83.8350], place: "Saline Township MI", conf: "low", addr: "US-12 & Braun Rd, Saline Township MI; reasoned from intersection" },
+  "Stargate Wisconsin (Vantage Lighthouse)": { ll: [43.4020, -87.8840], place: "Port Washington WI", conf: "medium", addr: "Highland Dr / E Lake Dr, Port Washington WI (bounded by I-43 and Lake Dr)" },
+  "xAI Colossus 1": { ll: [35.0470, -90.1530], place: "South Memphis TN", conf: "medium", addr: "3231 Paul R. Lowry Rd, Memphis TN (former Electrolux plant)" },
+  "xAI Colossus 2": { ll: [34.9980, -90.0350], place: "Whitehaven, Memphis TN / Southaven MS", conf: "high", addr: "5400 Tulane Rd, Memphis TN; Southaven gas plant at 2875 Stanton Rd S" },
+  "xAI Macrohardrr (Colossus 3)": { ll: [34.9930, -90.0340], place: "Southaven MS", conf: "high", addr: "2400 Stateline Rd W, Southaven MS (ex-GXO warehouse)" },
+  "Fluidstack Abernathy": { ll: [33.8400, -101.8400], place: "Abernathy TX", conf: "low", addr: "Within Aligned 'Project Caprock' parcel, Abernathy TX; parcel not published" },
+  "Meridian Arc (Sullivan County)": { ll: [39.0660, -87.4850], place: "New Lebanon IN", conf: "medium", addr: "Heartland Industrial Park, CR 200 S (Old SR 54) near Merom plant, Sullivan County IN" },
+  "Zenith Arc (Okmulgee County)": { ll: [35.6200, -95.9600], place: "Okmulgee County OK", conf: "low", addr: "Okmulgee County OK; 200-ac site location not published (town centroid)" },
+  "Fluidstack Cameron County": { ll: [26.2220, -97.6150], place: "Rio Hondo TX", conf: "low", addr: "Between FM 509 and FM 106, E of Valley Intl Airport, Cameron County TX" },
+  "Nexus Hubbard": { ll: [31.8240, -96.7760], place: "Hubbard TX", conf: "medium", addr: "~2,000 ac near Hubbard TX (Pin Oak Creek)" },
+  "Meta Hyperion (Blue Owl JV)": { ll: [32.5050, -91.6500], place: "Richland Parish LA", conf: "medium", addr: "Franklin Farm megasite, LA-183 N of Holly Ridge, Richland Parish LA" },
+  "Meta El Paso (BlackRock JV)": { ll: [31.9650, -106.4050], place: "El Paso TX", conf: "low", addr: "6901 Stan Roberts Sr. Ave, El Paso TX (permit address); reasoned from address" },
+  "Meta Prometheus": { ll: [40.0850, -82.7280], place: "New Albany OH", conf: "medium", addr: "1500 Beech Rd, New Albany OH (across from Google)" },
+  "Meta Lebanon IN": { ll: [40.0350, -86.5350], place: "Lebanon IN", conf: "medium", addr: "LEAP District W of I-65 on SR-32, Boone County IN" },
+  "Microsoft Fairwater WI": { ll: [42.6880, -87.9120], place: "Mount Pleasant WI", conf: "medium", addr: "4800 90th St, Mount Pleasant WI (ex-Foxconn TID 5)" },
+  "Microsoft Fairwater Atlanta": { ll: [33.4570, -84.5240], place: "Fayetteville GA", conf: "medium", addr: "1435 Hwy 54 W, Fayetteville GA (QTS campus)" },
+  "Amazon Project Rainier": { ll: [41.6840, -86.4600], place: "New Carlisle IN", conf: "medium", addr: "55001 Larrison Blvd, New Carlisle IN (Indiana Enterprise Center)" }
 };
 /*__SITE_GEO_END__*/
 
@@ -873,7 +874,7 @@ const US_BORDERS = "M145.0,407.0L145.5,406.5L147.0,407.0L148.8,406.9L148.8,406.1
   const m = SITE_META[d.deal] || {};
   d.state = m.state || null; d.power = m.power || null; d.url = m.url || null; d.siteNote = m.note || null;
   const g = SITE_GEO[d.deal] || null;
-  d.ll = g ? g.ll : null; d.place = g ? g.place : null; d.multiSite = !!(g && g.multi);
+  d.ll = g ? g.ll : null; d.place = g ? g.place : null; d.multiSite = !!(g && g.multi); d.geoConf = g ? (g.conf || null) : null; d.geoAddr = g ? (g.addr || null) : null;
   d.county = COUNTY[d.deal] || null; d.coords = d.ll ? (d.ll[0].toFixed(3) + "," + d.ll[1].toFixed(3)) : null;
   const st = STATUS[d.deal] || {};
   d.permitting = st.permitting || "Undisclosed"; d.construction = st.construction || "Undisclosed"; d.statusNote = st.note || null;
@@ -1456,7 +1457,9 @@ const US_BORDERS = "M145.0,407.0L145.5,406.5L147.0,407.0L148.8,406.9L148.8,406.1
           if (!d.ll) return "<td>—</td>";
           const la = d.ll[0].toFixed(3), lo = d.ll[1].toFixed(3);
           const href = "https://www.google.com/maps/place/" + la + "," + lo + "/@" + la + "," + lo + ",2500m/data=!3m1!1e3";
-          return '<td class="num"><a class="deal-link" href="' + href + '" target="_blank" rel="noopener" title="Open satellite view in Google Maps">' + la + ", " + lo + "</a></td>";
+          const confLbl = d.geoConf === "high" ? "Site-verified" : d.geoConf === "medium" ? "Site (medium confidence)" : "Approximate";
+          const tip = confLbl + (d.geoAddr ? " — " + d.geoAddr : "") + ". Opens satellite view in Google Maps.";
+          return '<td class="num"><a class="deal-link' + (d.geoConf === "low" || !d.geoConf ? " approx" : "") + '" href="' + href + '" target="_blank" rel="noopener" title="' + escapeHtml(tip) + '">' + la + ", " + lo + (d.geoConf === "low" || !d.geoConf ? " ~" : "") + "</a></td>";
         }
         if (c.k === "permitting" || c.k === "construction") return '<td title="' + escapeHtml(d.statusNote || "") + '"><span class="chip ' + chipClass(v) + '">' + escapeHtml(v || "Undisclosed") + "</span></td>";
         if ((c.k === "state" || c.k === "power") && d.siteNote) {
