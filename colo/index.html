@@ -185,6 +185,12 @@ body { background: var(--canvas); }
 /* Accent hairlines on the chrome edges */
 .top { box-shadow: 0 1px 0 rgba(91,140,255,.35), 0 6px 18px rgba(0,0,0,.35); border-bottom-color: rgba(91,140,255,.22); }
 .bottom { box-shadow: 0 -1px 0 rgba(91,140,255,.35), 0 -6px 18px rgba(0,0,0,.35); border-top-color: rgba(91,140,255,.22); }
+.chip { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: .66rem; font-weight: 600; letter-spacing: .02em; border: 1px solid transparent; white-space: nowrap; }
+.chip.ok { color: #3dd6c6; background: rgba(61,214,198,.12); border-color: rgba(61,214,198,.35); }
+.chip.mid { color: #5b8cff; background: rgba(91,140,255,.12); border-color: rgba(91,140,255,.35); }
+.chip.low { color: #c9b26b; background: rgba(242,193,78,.10); border-color: rgba(242,193,78,.3); }
+.chip.bad { color: #ff8a8a; background: rgba(220,80,80,.14); border-color: rgba(220,80,80,.4); }
+.chip.na { color: var(--muted); background: rgba(154,168,191,.08); border-color: rgba(154,168,191,.25); }
 </style>
 </head>
 <body>
@@ -354,6 +360,302 @@ PRIVATE_DEALS.forEach((d, i) => { d.col = "P" + (i + 1); DATA.deals.push(d); });
 DATA.n = DATA.deals.length;
 /*__PRIVATE_DEALS_END__*/
 
+/*__STATUS_START__*/
+// Permitting: Permitted | Pending | Contested | Not Required | Undisclosed. Construction: Operating | Under Construction | Pre-Construction | Planned | Undisclosed.
+const STATUS = {
+ "CORZ 200": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "Q3'26 deck (Nov 5): Denton 260/260, Muskogee 70/70, Marble 65/65 MW billing; Dalton 75/175 (Ph2 to early 2027)"
+ },
+ "CORZ 70": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "Q3'26 deck Nov 5: Denton 260/260 and Austin 20/20 MW billing; site mapping to contract not disclosed"
+ },
+ "CORZ 112": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "Denton fully billing (~260/260 MW) per Q3'26 deck, Nov 5 2026"
+ },
+ "CORZ 120": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "Dalton 75/175 MW billing; ~100 MW Dalton Ph2 in commissioning, completion early 2027 (Q3 call Nov 5)"
+ },
+ "CORZ Denton": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "Denton ~260/260 MW billing as of Nov 5 2026 Q3 deck"
+ },
+ "CORZ AMD": {
+  "permitting": "Pending",
+  "construction": "Pre-Construction",
+  "note": "Nov 5 call: Pecos air permit unfiled, 10.6-mi gas pipeline proposed; Hunt in final ERCOT study; first delivery 1H27"
+ },
+ "WULF CB1&2": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "60 MW Core42 operational/revenue-generating as of Mar 31 2026; 102 MW campus live Jul 2026"
+ },
+ "WULF CB-3&4": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "CB-3 delivered early Jul 2026; CB-4 first hall in commissioning, phased delivery H2'26 (Q2 release Aug 5)"
+ },
+ "WULF CB-5": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "Q2 release Aug 5 2026: CB-5 under construction, phased delivery early 2027"
+ },
+ "WULF Hawesville": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "KY PSC approved 482 MW Big Rivers/Kenergy ESA Aug 21 2026; demolition/site prep underway, Fluor EPC signed (Nov 5)"
+ },
+ "WYFI NC-1": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "Initial billing began; full 40 MW run-rate billing expected Aug 2026 (Q2 call Aug 12 2026)"
+ },
+ "IOND Cedarvale": {
+  "permitting": "Not Required",
+  "construction": "Operating",
+  "note": "Ward County 234 MW energized since 2023 (ERCOT-approved 2022); Nscale cash rent commenced Aug 2026 (Q3 release Nov 4)"
+ },
+ "CIFR Barber Lake Phase 1": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "Nov 2 2026: RFS notice for first 51 MW, rent collecting; remaining halls Q4'26–Q1'27"
+ },
+ "CIFR Barber Lake Phase 2": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "Same grid-connected facility; final data hall expected Q1 2027 (Q3 call Nov 2 2026)"
+ },
+ "CIFR Barber Lake 2037": {
+  "permitting": "Not Required",
+  "construction": "Under Construction",
+  "note": "Second 10-yr term on existing Barber Lake facility (amended Q3'26); no new approvals disclosed"
+ },
+ "CIFR Black Pearl": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "First capacity delivered Aug 2026, 18 MW delivered to date; Ph1 halls in MEP fit-out (Nov 2 2026)"
+ },
+ "CIFR Stingray": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "Steel erection progressing, shell complete Q4 2026; expansion got ERCOT PCLR (Nov 2 2026)"
+ },
+ "APLD PF1": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "250 MW live (Bldg 2 Ph2 Oct 1 2026); third 150 MW building under construction (Oct 7 2026 release)"
+ },
+ "APLD PF2": {
+  "permitting": "Undisclosed",
+  "construction": "Under Construction",
+  "note": "Under construction; initial operations expected by CY-end 2026 (Oct 7 2026 release)"
+ },
+ "APLD DF1": {
+  "permitting": "Undisclosed",
+  "construction": "Under Construction",
+  "note": "Ground broken Jan 22 2026; under construction, initial ops mid-2027 (Oct 7 2026 release)"
+ },
+ "APLD PF3": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "MDU 430 MW electric service agreement Jun 23 2026; under construction per Oct 7 2026 release; ops Aug 2027"
+ },
+ "APLD DF2": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "ADEM permit approved Jul 20 2026; TCEDA signoff Sep 24; 'under construction' per Oct 7 2026 release"
+ },
+ "BTDR Tydal": {
+  "permitting": "Undisclosed",
+  "construction": "Under Construction",
+  "note": "Q2 release Aug 10 2026: Ph1 66.5 MW targeted Q4'26, Ph2 Q1'27; lease requires delivery by Dec 31 2026"
+ },
+ "DGXX Columbiana": {
+  "permitting": "Pending",
+  "construction": "Under Construction",
+  "note": "Construction began May 2026; Alabama Power interconnect finalized; Ph2 in planning-commission review; Ph1 RFS Dec 15 2026"
+ },
+ "HUT River Bend": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "Nov 4 2026: steel/foundations done on 4 halls, substation initially energized, 1,200 on site; first hall Q2 2027"
+ },
+ "HUT Beacon Point 1": {
+  "permitting": "Pending",
+  "construction": "Under Construction",
+  "note": "Nov 4 2026: ERCOT baseload designation subject to state audit (final Dec 17); foundations/underground utilities underway"
+ },
+ "HUT Beacon Point 2": {
+  "permitting": "Pending",
+  "construction": "Pre-Construction",
+  "note": "Civil design/surveying underway; unfinanced; same ERCOT classification pending (Q3 call Nov 4 2026)"
+ },
+ "CLSK Sandersville": {
+  "permitting": "Undisclosed",
+  "construction": "Under Construction",
+  "note": "Sep 8 2026 release: 'strong construction progress'; delivery begins Q4 2027; permits not disclosed"
+ },
+ "RIOT Rockdale 1": {
+  "permitting": "Not Required",
+  "construction": "Operating",
+  "note": "25 MW delivered May 2026 in retrofitted existing building; first full stabilized quarter Q3 (Nov 4 2026)"
+ },
+ "RIOT Rockdale 2": {
+  "permitting": "Not Required",
+  "construction": "Under Construction",
+  "note": "Nov 4 2026 deck: 10 MW energized/ready for commissioning, Nov 2026 delivery; remaining 15 MW May 2027"
+ },
+ "RIOT Rockdale 3": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "GC mobilized Sep 2026, excavation underway (Nov 4 deck); existing 700 MW interconnection fully approved"
+ },
+ "RIOT Corsicana": {
+  "permitting": "Permitted",
+  "construction": "Pre-Construction",
+  "note": "Nov 4 2026: 1 GW interconnection fully approved; substation expansion underway; Riot to fund powered pads; 400 MW Sep 2027"
+ },
+ "FRMI Matador 1": {
+  "permitting": "Permitted",
+  "construction": "Pre-Construction",
+  "note": "TCEQ 6 GW air permit issued Feb 25 2026, hearing requests denied; lease effectiveness/build contingent on financing (Nov 3)"
+ },
+ "GLXY Helios 1": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "133 MW delivered Q2 2026; first full revenue quarter Q3 (Oct 27 2026 release)"
+ },
+ "GLXY Helios 2": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "Fully financed ($3.5B notes), under construction; 1,630 MW approved power; deliveries begin Q2 2027 (Oct 27 2026)"
+ },
+ "GLXY Helios 3": {
+  "permitting": "Permitted",
+  "construction": "Pre-Construction",
+  "note": "Within 1,630 MW approved capacity; rent commencement 2028; Q3 deck lists only Ph I/II 'under development'"
+ },
+ "Stargate Abilene": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "Oracle Sep 10 2026 call: 6 of 8 bldgs live, ~618 MW IT; 600 MW expansion scrapped Mar 2026"
+ },
+ "Stargate Shackelford (Vantage Frontier)": {
+  "permitting": "Pending",
+  "construction": "Under Construction",
+  "note": "Sep 2026 imagery: Bldgs 1-5 roofed; VoltaGrid TCEQ major-source permit at preliminary decision Sep 22 2026, state TCEQ pause"
+ },
+ "Stargate Milam County": {
+  "permitting": "Undisclosed",
+  "construction": "Under Construction",
+  "note": "Ground broke Oct 2025; Bldg 1 steel/roofing Mar 2026 (Epoch); no public air/interconnection filings found"
+ },
+ "Stargate Lordstown": {
+  "permitting": "Undisclosed",
+  "construction": "Under Construction",
+  "note": "Epoch Jul 30 2026 imagery: active build, roofing mostly on; only stormwater/water permits cited"
+ },
+ "Stargate New Mexico (Project Jupiter)": {
+  "permitting": "Contested",
+  "construction": "Under Construction",
+  "note": "NMED air permit still pending Nov 5 2026; NM Supreme Court stay Aug-Sep 2026; site under construction"
+ },
+ "Stargate Michigan (Saline Twp)": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "MPSC approved DTE contracts Dec 18 2025; EGLE permits Jan 2026; construction ceremony Jun 1 2026"
+ },
+ "Stargate Wisconsin (Vantage Lighthouse)": {
+  "permitting": "Pending",
+  "construction": "Under Construction",
+  "note": "DNR air permits Jun 12 2026 (Sierra Club suit settled Oct 16 2026); PSC voided ATC transmission application Aug 6 2026, refiled"
+ },
+ "xAI Colossus 1": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "SCHD 15-turbine permit Jul 2025; appeal denied Dec 2025; TVA +150 MW Feb 2026; Anthropic leasing capacity May 2026"
+ },
+ "xAI Colossus 2": {
+  "permitting": "Contested",
+  "construction": "Operating",
+  "note": "~450 MW online since Jan 2026; Oct 30 2026 N.D. Miss. denied dismissal of NAACP Clean Air Act suit; PI motion pending"
+ },
+ "xAI Macrohardrr (Colossus 3)": {
+  "permitting": "Contested",
+  "construction": "Operating",
+  "note": "Online Q1 2026 (~250 MW); powered by Southaven gas plant under NAACP suit; MDEQ $6.1M enforcement notice"
+ },
+ "Fluidstack Abernathy": {
+  "permitting": "Undisclosed",
+  "construction": "Under Construction",
+  "note": "TeraWulf 10-Q Q2 2026: under construction, delivery H2 2026; sold to Fluidstack group Jul 2026; no permits located"
+ },
+ "Meridian Arc (Sullivan County)": {
+  "permitting": "Undisclosed",
+  "construction": "Under Construction",
+  "note": "$5.7B notes Apr 2026; ~$600M labor contracts on Phase 1 (Aug 6 2026); first hall Jul 2027; no permit records found"
+ },
+ "Zenith Arc (Okmulgee County)": {
+  "permitting": "Pending",
+  "construction": "Under Construction",
+  "note": "Floodplain permit denied Aug/Sep 2026, conditional Permit 26008 issued Oct 16 2026 (Pond 1 held); state permits outstanding"
+ },
+ "Fluidstack Cameron County": {
+  "permitting": "Pending",
+  "construction": "Under Construction",
+  "note": "County worksite permit Sep 10 2026 covers grading only; building permits still required; Phase 1 site work started"
+ },
+ "Nexus Hubbard": {
+  "permitting": "Pending",
+  "construction": "Under Construction",
+  "note": "613 MW standard air permit Jun 2025; 7.2 GW permit pending, TCEQ pause Sep 21 2026; ~80 acres graded Oct 2026, no structures"
+ },
+ "Meta Hyperion (Blue Owl JV)": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "LPSC approved 3 CCGTs Aug 20 2025; 7 more plants decision Dec 16 2026; Sierra Club contesting Jun 2026 air permit amendment"
+ },
+ "Meta El Paso (BlackRock JV)": {
+  "permitting": "Pending",
+  "construction": "Under Construction",
+  "note": "Site work since Oct 2025, $289M building permit Jan 2026; PUCT ALJs recommended McCloud CCN Sep 28 2026, final order pending"
+ },
+ "Meta Prometheus": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "Aug 31 2026: Prometheus South (480 MW) operating on gas plant; North halls built, not energized"
+ },
+ "Meta Lebanon IN": {
+  "permitting": "Permitted",
+  "construction": "Under Construction",
+  "note": "Groundbreaking Feb 11 2026; grid-powered, IEDC/local approvals; first phase targeted late 2027–early 2028"
+ },
+ "Microsoft Fairwater WI": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "First Fairwater building operational Jun 23 2026; village approved 15 more buildings Jan 2026; Bldg 2 due 2028"
+ },
+ "Microsoft Fairwater Atlanta": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "Epoch: Bldgs 1-2 live Oct 2025, Bldgs 3-4 live Jun 2026, ~636 MW IT"
+ },
+ "Amazon Project Rainier": {
+  "permitting": "Permitted",
+  "construction": "Operating",
+  "note": "Epoch Oct 19 2026: Bldgs 1-16 operational, ~1.0 GW IT; air permit for Bldgs 19-32 filed May 2026 (pending)"
+ }
+};
+/*__STATUS_END__*/
+
 /*__SITE_META_START__*/
 // Per-deal site metadata: US state, power source (Grid vs BTM), and lessor press release.
 const SITE_META = {
@@ -492,6 +794,8 @@ const US_BORDERS = "M145.0,407.0L145.5,406.5L147.0,407.0L148.8,406.9L148.8,406.1
   d.state = m.state || null; d.power = m.power || null; d.url = m.url || null; d.siteNote = m.note || null;
   const g = SITE_GEO[d.deal] || null;
   d.ll = g ? g.ll : null; d.place = g ? g.place : null; d.multiSite = !!(g && g.multi);
+  const st = STATUS[d.deal] || {};
+  d.permitting = st.permitting || "Undisclosed"; d.construction = st.construction || "Undisclosed"; d.statusNote = st.note || null;
   if (!d.tier) d.tier = "Public";
 });
 
@@ -506,6 +810,8 @@ const US_BORDERS = "M145.0,407.0L145.5,406.5L147.0,407.0L148.8,406.9L148.8,406.1
     {k:"baseTermYrs", l:"Term", num:true},
     {k:"start", l:"Startup Date", num:false},
     {k:"power", l:"Power", num:false},
+    {k:"permitting", l:"Permitting", num:false},
+    {k:"construction", l:"Construction", num:false},
     {k:"itMw", l:"IT MW", num:true},
     {k:"baseTcvMm", l:"Base TCV", num:true},
     {k:"fullTcvMm", l:"Full TCV", num:true},
@@ -1012,6 +1318,14 @@ const US_BORDERS = "M145.0,407.0L145.5,406.5L147.0,407.0L148.8,406.9L148.8,406.1
   let sortKey = "announced";
   let sortDir = -1;
 
+  function chipClass(v) {
+    const k = String(v || "").toLowerCase();
+    if (k === "operating" || k === "permitted" || k === "not required") return "ok";
+    if (k === "under construction" || k === "pending") return "mid";
+    if (k === "contested") return "bad";
+    if (k === "pre-construction" || k === "planned") return "low";
+    return "na";
+  }
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
   }
@@ -1054,6 +1368,7 @@ const US_BORDERS = "M145.0,407.0L145.5,406.5L147.0,407.0L148.8,406.9L148.8,406.1
         if (c.k === "deal" && d.url) {
           return '<td><a class="deal-link" href="' + escapeHtml(d.url) + '" target="_blank" rel="noopener">' + escapeHtml(v == null ? "—" : String(v)) + "</a></td>";
         }
+        if (c.k === "permitting" || c.k === "construction") return '<td title="' + escapeHtml(d.statusNote || "") + '"><span class="chip ' + chipClass(v) + '">' + escapeHtml(v || "Undisclosed") + "</span></td>";
         if ((c.k === "state" || c.k === "power") && d.siteNote) {
           return '<td title="' + escapeHtml(d.siteNote) + '">' + escapeHtml(v == null ? "—" : String(v)) + "</td>";
         }
