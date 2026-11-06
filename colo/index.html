@@ -202,7 +202,10 @@ body { background: var(--canvas); }
   .scroll .wrap { padding-block: 12px 12px; }
   .bottom .table-wrap { height: auto !important; max-height: none; overflow-x: auto; overflow-y: visible; }
   .bottom[data-state="collapsed"] .table-wrap { display: none; }
-  .bottom .seg button[data-state="partial"], .bottom .seg button[data-state="expanded"] { display: none; }
+  .bottom .seg button[data-state="partial"] { display: none; }
+  .bottom .seg button[data-state="expanded"] { font-size: 0; }
+  .bottom .seg button[data-state="expanded"]::after { content: "Show"; font-size: .74rem; }
+  .bottom[data-state="partial"] .seg button[data-state="expanded"] { color: var(--text); background: rgba(91,140,255,.18); }
   .map-box { max-height: 60vh; }
 }
 </style>
