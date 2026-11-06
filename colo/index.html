@@ -377,6 +377,69 @@ PRIVATE_DEALS.forEach((d, i) => { d.col = "P" + (i + 1); DATA.deals.push(d); });
 DATA.n = DATA.deals.length;
 /*__PRIVATE_DEALS_END__*/
 
+/*__COUNTY_START__*/
+const COUNTY = {
+ "CORZ 200": "Denton County (DFW); multi-site",
+ "CORZ 70": "Muskogee County (Tulsa); likely",
+ "CORZ 112": "Whitfield County (Chattanooga); multi-site",
+ "CORZ 120": "Whitfield County (Chattanooga); likely",
+ "CORZ Denton": "Denton County (DFW)",
+ "CORZ AMD": "Reeves County (NA – Pecos); multi-site",
+ "WULF CB1&2": "Niagara County (Buffalo)",
+ "WULF CB-3&4": "Niagara County (Buffalo)",
+ "WULF CB-5": "Niagara County (Buffalo)",
+ "WULF Hawesville": "Hancock County (Owensboro)",
+ "WYFI NC-1": "Rockingham County (Greensboro)",
+ "IOND Cedarvale": "Ward County (Midland–Odessa)",
+ "CIFR Barber Lake Phase 1": "Mitchell County (Abilene)",
+ "CIFR Barber Lake Phase 2": "Mitchell County (Abilene)",
+ "CIFR Barber Lake 2037": "Mitchell County (Abilene)",
+ "CIFR Black Pearl": "Winkler County (Midland–Odessa)",
+ "CIFR Stingray": "Andrews County (Midland–Odessa)",
+ "APLD PF1": "Dickey County (NA – Ellendale)",
+ "APLD PF2": "Cass County (Fargo)",
+ "APLD DF1": "Rapides Parish (Alexandria)",
+ "APLD PF3": "Oliver County (Bismarck)",
+ "APLD DF2": "Tuscaloosa County (Tuscaloosa)",
+ "BTDR Tydal": "Tydal Municipality (Trondheim)",
+ "DGXX Columbiana": "Shelby County (Birmingham)",
+ "HUT River Bend": "West Feliciana Parish (Baton Rouge)",
+ "HUT Beacon Point 1": "Nueces County (Corpus Christi)",
+ "HUT Beacon Point 2": "Nueces County (Corpus Christi)",
+ "CLSK Sandersville": "Washington County (NA – Sandersville)",
+ "RIOT Rockdale 1": "Milam County (Austin)",
+ "RIOT Rockdale 2": "Milam County (Austin)",
+ "RIOT Rockdale 3": "Milam County (Austin)",
+ "RIOT Corsicana": "Navarro County (DFW)",
+ "FRMI Matador 1": "Carson County (Amarillo)",
+ "GLXY Helios 1": "Dickens County (Lubbock)",
+ "GLXY Helios 2": "Dickens County (Lubbock)",
+ "GLXY Helios 3": "Dickens County (Lubbock)",
+ "Stargate Abilene": "Taylor County (Abilene)",
+ "Stargate Shackelford (Vantage Frontier)": "Shackelford County (Abilene)",
+ "Stargate Milam County": "Milam County (Austin)",
+ "Stargate Lordstown": "Trumbull County (Youngstown)",
+ "Stargate New Mexico (Project Jupiter)": "Doña Ana County (El Paso–Las Cruces)",
+ "Stargate Michigan (Saline Twp)": "Washtenaw County (Ann Arbor)",
+ "Stargate Wisconsin (Vantage Lighthouse)": "Ozaukee County (Milwaukee)",
+ "xAI Colossus 1": "Shelby County (Memphis)",
+ "xAI Colossus 2": "Shelby County TN / DeSoto County MS (Memphis)",
+ "xAI Macrohardrr (Colossus 3)": "DeSoto County (Memphis)",
+ "Fluidstack Abernathy": "Hale County (Lubbock)",
+ "Meridian Arc (Sullivan County)": "Sullivan County (Terre Haute)",
+ "Zenith Arc (Okmulgee County)": "Okmulgee County (Tulsa)",
+ "Fluidstack Cameron County": "Cameron County (Harlingen–Brownsville)",
+ "Nexus Hubbard": "Hill County (Waco)",
+ "Meta Hyperion (Blue Owl JV)": "Richland Parish (Monroe)",
+ "Meta El Paso (BlackRock JV)": "El Paso County (El Paso)",
+ "Meta Prometheus": "Licking County (Columbus)",
+ "Meta Lebanon IN": "Boone County (Indianapolis)",
+ "Microsoft Fairwater WI": "Racine County (Milwaukee)",
+ "Microsoft Fairwater Atlanta": "Fayette County (Atlanta)",
+ "Amazon Project Rainier": "St. Joseph County (South Bend)"
+};
+/*__COUNTY_END__*/
+
 /*__STATUS_START__*/
 // Permitting: Permitted | Pending | Contested | Not Required | Undisclosed. Construction: Operating | Under Construction | Pre-Construction | Planned | Undisclosed.
 const STATUS = {
@@ -811,6 +874,7 @@ const US_BORDERS = "M145.0,407.0L145.5,406.5L147.0,407.0L148.8,406.9L148.8,406.1
   d.state = m.state || null; d.power = m.power || null; d.url = m.url || null; d.siteNote = m.note || null;
   const g = SITE_GEO[d.deal] || null;
   d.ll = g ? g.ll : null; d.place = g ? g.place : null; d.multiSite = !!(g && g.multi);
+  d.county = COUNTY[d.deal] || null; d.coords = d.ll ? (d.ll[0].toFixed(3) + "," + d.ll[1].toFixed(3)) : null;
   const st = STATUS[d.deal] || {};
   d.permitting = st.permitting || "Undisclosed"; d.construction = st.construction || "Undisclosed"; d.statusNote = st.note || null;
   if (!d.tier) d.tier = "Public";
@@ -818,8 +882,10 @@ const US_BORDERS = "M145.0,407.0L145.5,406.5L147.0,407.0L148.8,406.9L148.8,406.1
 
 (function () {
   const COLS = [
-    {k:"deal", l:"Deal", num:false},
+    {k:"deal", l:"Deal (Link for Detail)", num:false},
     {k:"state", l:"State", num:false},
+    {k:"county", l:"County (Metro Area)", num:false},
+    {k:"coords", l:"Coordinates", num:false},
     {k:"ticker", l:"Lessor", num:false},
     {k:"tier", l:"Tier", num:false},
     {k:"tenant", l:"Tenant", num:false},
@@ -1384,6 +1450,13 @@ const US_BORDERS = "M145.0,407.0L145.5,406.5L147.0,407.0L148.8,406.9L148.8,406.1
         if (c.num) return '<td class="num">' + fmt(num(v)) + "</td>";
         if (c.k === "deal" && d.url) {
           return '<td><a class="deal-link" href="' + escapeHtml(d.url) + '" target="_blank" rel="noopener">' + escapeHtml(v == null ? "—" : String(v)) + "</a></td>";
+        }
+        if (c.k === "county") return "<td>" + escapeHtml(v || "—") + "</td>";
+        if (c.k === "coords") {
+          if (!d.ll) return "<td>—</td>";
+          const la = d.ll[0].toFixed(3), lo = d.ll[1].toFixed(3);
+          const href = "https://www.google.com/maps/place/" + la + "," + lo + "/@" + la + "," + lo + ",2500m/data=!3m1!1e3";
+          return '<td class="num"><a class="deal-link" href="' + href + '" target="_blank" rel="noopener" title="Open satellite view in Google Maps">' + la + ", " + lo + "</a></td>";
         }
         if (c.k === "permitting" || c.k === "construction") return '<td title="' + escapeHtml(d.statusNote || "") + '"><span class="chip ' + chipClass(v) + '">' + escapeHtml(v || "Undisclosed") + "</span></td>";
         if ((c.k === "state" || c.k === "power") && d.siteNote) {
